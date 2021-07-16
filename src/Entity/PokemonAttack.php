@@ -2,15 +2,13 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\LearnLevelRepository;
+use App\Repository\PokemonAttackRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
- * @ORM\Entity(repositoryClass=LearnLevelRepository::class)
+ * @ORM\Entity(repositoryClass=PokemonAttackRepository::class)
  */
-class LearnLevel
+class PokemonAttack
 {
     /**
      * @ORM\Id
@@ -20,16 +18,16 @@ class LearnLevel
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Attack::class, inversedBy="learnLevels")
+     * @ORM\ManyToOne(targetEntity=Pokemon::class, inversedBy="attacks")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $attackName;
+    private $pokemon;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Pokemon::class, inversedBy="learnLevels")
+     * @ORM\ManyToOne(targetEntity=Attack::class, inversedBy="pokemons")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $Pokemons;
+    private $attack;
 
     /**
      * @ORM\Column(type="integer")
@@ -41,26 +39,26 @@ class LearnLevel
         return $this->id;
     }
 
-    public function getAttackName(): ?Attack
+    public function getPokemon(): ?Pokemon
     {
-        return $this->attackName;
+        return $this->pokemon;
     }
 
-    public function setAttackName(?Attack $attackName): self
+    public function setPokemon(?Pokemon $pokemon): self
     {
-        $this->attackName = $attackName;
+        $this->pokemon = $pokemon;
 
         return $this;
     }
 
-    public function getPokemon(): ?Pokemon
+    public function getAttack(): ?Attack
     {
-        return $this->Pokemons;
+        return $this->attack;
     }
 
-    public function setPokemon(?Pokemon $Pokemon): self
+    public function setAttack(?Attack $attack): self
     {
-        $this->Pokemons = $Pokemon;
+        $this->attack = $attack;
 
         return $this;
     }
