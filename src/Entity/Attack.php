@@ -55,7 +55,7 @@ class Attack
     /**
      * @ORM\ManyToMany(targetEntity=Pokemon::class, mappedBy="attacks")
      */
-    private $pokemon;
+    private $pokemons;
 
     /**
      * @ORM\OneToMany(targetEntity=LearnLevel::class, mappedBy="attackName")
@@ -64,7 +64,7 @@ class Attack
 
     public function __construct()
     {
-        $this->pokemon = new ArrayCollection();
+        $this->pokemons = new ArrayCollection();
         $this->learnLevels = new ArrayCollection();
     }
 
@@ -150,13 +150,13 @@ class Attack
      */
     public function getPokemon(): Collection
     {
-        return $this->pokemon;
+        return $this->pokemons;
     }
 
     public function addPokemon(Pokemon $pokemon): self
     {
-        if (!$this->pokemon->contains($pokemon)) {
-            $this->pokemon[] = $pokemon;
+        if (!$this->pokemons->contains($pokemon)) {
+            $this->pokemons[] = $pokemon;
             $pokemon->addAttack($this);
         }
 
@@ -165,7 +165,7 @@ class Attack
 
     public function removePokemon(Pokemon $pokemon): self
     {
-        if ($this->pokemon->removeElement($pokemon)) {
+        if ($this->pokemons->removeElement($pokemon)) {
             $pokemon->removeAttack($this);
         }
 

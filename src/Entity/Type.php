@@ -39,12 +39,12 @@ class Type
     /**
      * @ORM\ManyToMany(targetEntity=Pokemon::class, mappedBy="type")
      */
-    private $pokemon;
+    private $pokemons;
 
     public function __construct()
     {
         $this->attacks = new ArrayCollection();
-        $this->pokemon = new ArrayCollection();
+        $this->pokemons = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -111,13 +111,13 @@ class Type
      */
     public function getPokemon(): Collection
     {
-        return $this->pokemon;
+        return $this->pokemons;
     }
 
     public function addPokemon(Pokemon $pokemon): self
     {
-        if (!$this->pokemon->contains($pokemon)) {
-            $this->pokemon[] = $pokemon;
+        if (!$this->pokemons->contains($pokemon)) {
+            $this->pokemons[] = $pokemon;
             $pokemon->addType($this);
         }
 
@@ -126,7 +126,7 @@ class Type
 
     public function removePokemon(Pokemon $pokemon): self
     {
-        if ($this->pokemon->removeElement($pokemon)) {
+        if ($this->pokemons->removeElement($pokemon)) {
             $pokemon->removeType($this);
         }
 

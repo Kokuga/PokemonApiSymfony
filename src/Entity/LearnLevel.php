@@ -29,7 +29,7 @@ class LearnLevel
      * @ORM\ManyToOne(targetEntity=Pokemon::class, inversedBy="learnLevels")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $Pokemon;
+    private $Pokemons;
 
     /**
      * @ORM\Column(type="integer")
@@ -55,12 +55,12 @@ class LearnLevel
 
     public function getPokemon(): ?Pokemon
     {
-        return $this->Pokemon;
+        return $this->Pokemons;
     }
 
     public function setPokemon(?Pokemon $Pokemon): self
     {
-        $this->Pokemon = $Pokemon;
+        $this->Pokemons = $Pokemon;
 
         return $this;
     }
