@@ -1,6 +1,7 @@
 <?php
 
 use App\Kernel;
+use App\Pokedex\PokemonAPI;
 
 require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 
