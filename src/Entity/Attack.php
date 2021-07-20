@@ -58,7 +58,7 @@ class Attack
     private $power;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Type::class, inversedBy="attacks")
+     * @ORM\ManyToOne(targetEntity=Type::class, inversedBy="attacks",cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"attack:get"})
      */

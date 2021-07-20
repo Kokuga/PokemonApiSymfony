@@ -26,10 +26,13 @@
          */
         private EntityManagerInterface $em;
 
-        public function __construct(PokemonRepository $pokemonRepository, EntityManagerInterface $em)
+        private TypeRepository $typeRepository;
+
+        public function __construct(PokemonRepository $pokemonRepository, TypeRepository $typeRepository, EntityManagerInterface $em)
         {
             $this->client = HttpClient::createForBaseUri('https://pokeapi.co/api/v2/');
             $this->pokemonRepository = $pokemonRepository;
+            $this->typeRepository = $typeRepository;
             $this->em = $em;
         }
 
@@ -53,11 +56,15 @@
                 $weight = $pokemon['weight'];
                 $baseExperience = $pokemon['base_experience'];
                 $order = $pokemon['order'];
-                $pokemon = ['name' => $name, 'id' => $stringExploded[6], 'height' => $height, 'weight' => $weight, 'base_experience' => $baseExperience, 'order' => $order];
+                $types = $pokemon['types'];
+                foreach ($types as $type) {
+                    $nameType = $type['type']['name'];
+                    $idTypeExploded = explode('/', $type['type']['url']);
+                    $pokemonType = ['name' => $nameType, 'id' => $idTypeExploded[6]];
+                }
+                $pokemon = ['name' => $name, 'id' => $stringExploded[6], 'height' => $height, 'weight' => $weight, 'base_experience' => $baseExperience, 'order' => $order, 'types' => ['type' => $pokemonType]];
                 $pokemons[] = $this->ConvertPokeapiToPokemon($pokemon);
             }
-
-            
             if ($next == null) {
                 return $pokemon;
             } else {
@@ -73,6 +80,7 @@
             $height = $array['height'];
             $weight = $array['weight'];
             $baseExperience = $array['base_experience'];
+            $types = $array['types'];
             $pokemon = $this->pokemonRepository->findOneBy(['pokedexOrder' => $order]);
             if ($pokemon === NULL) {
                 $pokemon = new Pokemon($id);
@@ -82,9 +90,25 @@
                 $pokemon->setHeight($height);
                 $pokemon->setPokedexOrder($order);
 
-                $this->em->persist($pokemon);
-                $this->em->flush();
+                foreach ($types as $type) {
+                    $pokemonType = $this->typeRepository->findOneBy(['pokeapiId' => $type['id']]);
+                    if ($pokemonType == NULL) {
+                        $type = new Type();
+                        $type->setPokeapiId($type['id']);
+                        $type->setName($type['name']);
+
+                        $this->em->persist($type);
+                        $this->em->flush();
+                    }
+
+                    $pokemon->addType($pokemonType);
+
+                    $this->em->persist($pokemon);
+                    $this->em->flush();
+                }
             }
+
+
             return $pokemon;
         }
     }

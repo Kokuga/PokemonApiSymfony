@@ -46,6 +46,7 @@ class Type
 
     /**
      * @ORM\OneToMany(targetEntity=Attack::class, mappedBy="type")
+     *
      */
     private $attacks;
 
