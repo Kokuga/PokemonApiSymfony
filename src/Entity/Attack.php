@@ -23,13 +23,12 @@ class Attack
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"attack:get"})
+     * @Groups({"attack:get", "pokemon:get"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"attack:get"})
      */
     private $pokeapiId;
 
@@ -58,7 +57,7 @@ class Attack
     private $power;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Type::class, inversedBy="attacks",cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity=Type::class, inversedBy="attacks")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"attack:get"})
      */
@@ -163,7 +162,6 @@ class Attack
     {
         if (!$this->pokemons->contains($pokemon)) {
             $this->pokemons[] = $pokemon;
-            $pokemon->setAttack($this);
         }
 
         return $this;
@@ -171,12 +169,7 @@ class Attack
 
     public function removePokemon(PokemonAttack $pokemon): self
     {
-        if ($this->pokemons->removeElement($pokemon)) {
-            // set the owning side to null (unless already changed)
-            if ($pokemon->getAttack() === $this) {
-                $pokemon->setAttack(null);
-            }
-        }
+        $this->pokemons->removeElement($pokemon);
 
         return $this;
     }

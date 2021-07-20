@@ -29,7 +29,6 @@ class Type
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"type:get"})
      */
     private $pokeapiId;
 
@@ -46,7 +45,6 @@ class Type
 
     /**
      * @ORM\OneToMany(targetEntity=Attack::class, mappedBy="type")
-     *
      */
     private $attacks;
 
